@@ -1,0 +1,10 @@
+-- Cumulative Sum
+
+Cumulative Sum = 
+CALCULATE(
+    [Measure],
+    FILTER(
+        ALLSELECTED(Table),
+        MAX(Table[Date]) >= Table[Date]
+    )
+)

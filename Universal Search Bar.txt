@@ -1,0 +1,44 @@
+-- Universal Search Bar
+
+Universal Search Bar = 
+DISTINCT (
+	UNION (
+	SELECTCOLUMNS (
+		'Table',
+		"Selection", 'Table'[Field1],
+		"Key", 'Table'[KEY]
+		)
+    ,
+    SELECTCOLUMNS (
+		'Table',
+		"Selection", 'Table'[Field2],
+		"Key", 'Table'[KEY]
+		)
+    ,
+    SELECTCOLUMNS (
+		'Table',
+		"Selection", 'Table'[Field3],
+		"Key", 'Table'[KEY]
+		)
+    ,
+    SELECTCOLUMNS (
+		'Table',
+		"Selection", 'Table'[Field4],
+		"Key", 'Table'[KEY]
+		)
+    ,
+    SELECTCOLUMNS (
+		'Table',
+		"Selection", 'Table'[Field5],
+		"Key", 'Table'[KEY]
+		)
+    ,
+    SELECTCOLUMNS (
+		'Table',
+		"Selection", 'Table'[Field6],
+		"Key", 'Table'[KEY]
+		)
+)
+)
+
+-- Note: Can be used with Smart Filter by OKVIZ custom visual

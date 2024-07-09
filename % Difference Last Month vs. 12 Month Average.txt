@@ -1,0 +1,19 @@
+-- % Difference: Last Month vs. 12 Month Average
+
+% Difference: Last Month vs. 12 Month Average =
+VAR PreviousMonthDates = PREVIOUSMONTH(LASTDATE(ALL(Calendar[Date])))
+VAR FirstDate12MonthsInterval = FIRSTDATE(DATEADD(PREVIOUSMONTH(LASTDATE(ALL(Calendar[Date]))), -11, MONTH))
+VAR LastDate12MonthsInterval = LASTDATE(PREVIOUSMONTH(LASTDATE('Calendar'[Date])))
+RETURN
+
+DIVIDE(
+        (CALCULATE([Measure], PreviousMonthDates)
+        -
+        CALCULATE([Measure], Calendar[Date] >= FirstDate12MonthsInterval
+                            &&  Calendar[Date] < LastDate12MonthsInterval)/12)
+        ,
+        (CALCULATE([Measure], Calendar[Date] >= FirstDate12MonthsInterval
+                            &&  Calendar[Date] < LastDate12MonthsInterval)/12)
+        ,0)
+
+-- Note: Replace Measure with desired measure reference or definition

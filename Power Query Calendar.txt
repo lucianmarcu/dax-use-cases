@@ -1,0 +1,41 @@
+-- Calendar Table in Power Query Function --
+
+Part 1: Power Query Function Specification
+
+let
+    CreateDateTable = (StartDate, EndDate) =>
+let
+    MonthList = {"January", "February", "March", "April", "May", "June"
+                 , "July", "August", "September", "October", "November", "December"},
+    DayList = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"},
+    NumberOfDates = Duration.Days(EndDate-StartDate)+1,
+    DateList = List.Dates(StartDate, NumberOfDates, #duration(1, 0, 0, 0)),
+    TableFromList = Table.FromList(DateList, Splitter.SplitByNothing(), {"Date"}
+                     , null, ExtraValues.Error),
+    ChangedType = Table.TransformColumnTypes(TableFromList,{{"Date", type date}}),
+    Year = Table.AddColumn(ChangedType, "Year", each Date.Year([Date])),
+    QuarterNum = Table.AddColumn(Year, "QuarterNum", each Date.QuarterOfYear([Date])),
+    Quarter = Table.AddColumn(QuarterNum, "Quarter", each Number.ToText([Year])&"-Q"&Number.ToText([QuarterNum])),
+    Month = Table.AddColumn(Quarter, "Month", each Date.Month([Date])),
+    Week = Table.AddColumn(Month, "Week", each Date.WeekOfYear([Date])),
+    Day = Table.AddColumn(Week, "Day", each Date.Day([Date])),
+    YearMonth = Table.AddColumn(Day, "YearMonth", each Number.ToText(Date.Year([Date])) & "-" & Text.PadStart( Number.ToText(Date.Month([Date])),2,"0")),
+    DayOfYear = Table.AddColumn(YearMonth, "DayOfYear", each Date.DayOfYear([Date])),
+    DayOfWeekNumber = Table.AddColumn(DayOfYear, "DayOfWeekNumber", each Date.DayOfWeek([Date])+1),
+    MonthName = Table.AddColumn(DayOfWeekNumber, "MonthName", each MonthList{[Month]-1}),
+    DayName = Table.AddColumn(MonthName, "DayName", each DayList{[DayOfWeekNumber]-1})
+
+in
+    DayName
+in
+    CreateDateTable
+
+Part 2: Calendar Table Creation by calling function and passing start and end date paremeters
+
+let
+    Tomorrow = Date.AddDays(Date.From(DateTime.LocalNow()),1),
+    Source = CreateDateTable(#date(2020, 1, 1), Tomorrow)
+in
+    Source
+	
+Note: If any new columns are required they can easily be added by modifying the function

@@ -1,0 +1,14 @@
+-- N Days Moving Average --
+
+N-days Moving Average = 
+
+VAR NumberOfDays = N -- replace with desired number of days
+RETURN
+    AVERAGEX (
+    DATESINPERIOD (
+        'Calendar'[Date],
+        LASTDATE ( 'Calendar'[Date] ),
+        -1*NumberOfDays,
+        DAY
+    ), [Issues]
+)

@@ -1,0 +1,11 @@
+-- Top N Measure
+
+Top N Values by Measure = 
+Var Top = N -- replace N with desired Top values
+RETURN 
+CALCULATE([Measure],   --replace with desired measure or measure definition
+   FILTER( VALUES( Table[Value]),
+        IF( RANKX( ALL( Table[Value] ), 
+            [Measure],, DESC) <= Top,
+                [Measure], 
+                    BLANK())))

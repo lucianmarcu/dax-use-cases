@@ -1,0 +1,71 @@
+-- Currently Applied Filters Measure --
+
+Currently Applied Filters = 
+IF (
+    ISFILTERED( Table1[Field1] ) 	|| 
+	ISFILTERED( Table2[Field2] )		|| 
+    ISFILTERED( Tables3[Field3] )		|| 
+
+    ,
+
+    IF (
+                ISFILTERED ( Table1[Field1] ),
+					VAR MaxFilters = 10
+                    VAR ___f =
+                        FILTERS ( Table1[Field1] )
+                    VAR ___r =
+                        COUNTROWS ( ___f )
+                    VAR ___t =
+                        TOPN ( MaxFilters, ___f, Table1[Field1] )
+                    VAR ___d =
+                        CONCATENATEX ( ___t, Table1[Field1], ", " )
+                    VAR ___x =
+                        "Field1 = " & ___d
+                            & IF ( ___r > MaxFilters, ", ... [" & ___r & " items selected]" ) & " "
+                    RETURN
+                        "| " & ___x & UNICHAR ( 13 )
+                            & UNICHAR ( 10 )
+                    )
+        &
+        IF (
+                ISFILTERED ( Table2[Field2] ),
+					VAR MaxFilters = 10
+                    VAR ___f =
+                        FILTERS ( Table2[Field2] )
+                    VAR ___r =
+                        COUNTROWS ( ___f )
+                    VAR ___t =
+                        TOPN ( MaxFilters, ___f, Table2[BField2] )
+                    VAR ___d =
+                        CONCATENATEX ( ___t, Table2[Field2], ", " )
+                    VAR ___x =
+                        "Field2 = " & ___d
+                            & IF ( ___r > MaxFilters, ", ... [" & ___r & " items selected]" ) & " "
+                    RETURN
+                        "| " & ___x & UNICHAR ( 13 )
+                            & UNICHAR ( 10 )
+                    )
+        &
+        IF (
+                ISFILTERED ( Table3[Field3] ),
+					VAR MaxFilters = 10
+                    VAR ___f =
+                        FILTERS ( Table3[Field3] )
+                    VAR ___r =
+                        COUNTROWS ( ___f )
+                    VAR ___t =
+                        TOPN ( MaxFilters, ___f, Table3[Field3] )
+                    VAR ___d =
+                        CONCATENATEX ( ___t, Table3[Field3], ", " )
+                    VAR ___x =
+                        "Field3 = " & ___d
+                            & IF ( ___r > MaxFilters, ", ... [" & ___r & " items selected]" ) & " "
+                    RETURN
+                        "| " & ___x & UNICHAR ( 13 )
+                            & UNICHAR ( 10 )
+                    )
+
+    , "No Active Filters!"
+)
+
+-- Note: This is based on DAX Studio's "Define Filter Dump Measure" functionality --
